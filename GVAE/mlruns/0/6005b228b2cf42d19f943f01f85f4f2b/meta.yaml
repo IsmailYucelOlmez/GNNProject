@@ -1,0 +1,15 @@
+artifact_uri: file:///C:/Users/User/OneDrive/Masa%C3%BCst%C3%BC/GNNProject/GVAE/mlruns/0/6005b228b2cf42d19f943f01f85f4f2b/artifacts
+end_time: 1714315723223
+entry_point_name: ''
+experiment_id: '0'
+lifecycle_stage: active
+run_id: 6005b228b2cf42d19f943f01f85f4f2b
+run_name: enthused-ray-502
+run_uuid: 6005b228b2cf42d19f943f01f85f4f2b
+source_name: ''
+source_type: 4
+source_version: ''
+start_time: 1714310078046
+status: 4
+tags: []
+user_id: User

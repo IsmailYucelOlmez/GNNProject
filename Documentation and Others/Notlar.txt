@@ -2,6 +2,9 @@ metapath nedir ? avantajları nelerdir ?
 
 Tübitak 2209 projesine başvur (1 nisan'da başvuru süreci başlıyor)
 
+best parameters
+dataset test=true
+
 Dökümantasyon tek sayfa olacak (A3 formatında)
 (finalde getir)
 
