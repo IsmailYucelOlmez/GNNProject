@@ -2,6 +2,7 @@ from torch_geometric.utils import to_dense_adj
 import torch
 import mlflow.pytorch
 from rdkit import Chem
+from torch_geometric.utils import to_dense_adj
 from config import DEVICE as device
 
 def count_parameters(model):
@@ -99,6 +100,7 @@ def check_triu_graph_reconstruction(graph_predictions_triu, graph_targets_triu, 
         return True
     return False    
 
+
 def gvae_loss(triu_logits, edge_index, mu, logvar, batch_index, kl_beta):
     """
     Calculates a weighted ELBO loss for a batch of graphs for the graph
@@ -143,15 +145,15 @@ def gvae_loss(triu_logits, edge_index, mu, logvar, batch_index, kl_beta):
 
 
 def reconstruction_accuracy(triu_logits, edge_index, batch_index, node_features):
-    # Convert edge index to adjacency matrix
+    
     batch_targets = torch.squeeze(to_dense_adj(edge_index))
-    # Store target trius
+    
     batch_targets_triu = []
-    # Iterate over batch and collect each of the trius
+    
     batch_node_counter = 0
     num_recon = 0
     for graph_id in torch.unique(batch_index):
-        # Get triu parts for this graph
+        
         graph_targets_triu = slice_graph_targets(graph_id, 
                                                 batch_targets, 
                                                 batch_index)
@@ -159,29 +161,28 @@ def reconstruction_accuracy(triu_logits, edge_index, batch_index, node_features)
                                                         graph_targets_triu.shape[0], 
                                                         batch_node_counter)
 
-        # Update counter to the index of the next graph
+        
         batch_node_counter = batch_node_counter + graph_targets_triu.shape[0]
 
-        # Slice node features of this batch
+        
         graph_node_features = slice_node_features(graph_id, node_features, batch_index)
 
-        # Check if graph is successfully reconstructed
+        
         num_nodes = sum(torch.eq(batch_index, graph_id))
         recon = check_triu_graph_reconstruction(graph_predictions_triu, 
                                                 graph_targets_triu, 
                                                 graph_node_features, num_nodes) 
         num_recon = num_recon + int(recon)
 
-        # Add targets to triu list
+        
         batch_targets_triu.append(graph_targets_triu)
 
-    # Calculate accuracy between predictions and labels
+    
     batch_targets_triu = torch.cat(batch_targets_triu).detach().cpu()
     triu_discrete = torch.squeeze(torch.tensor(torch.sigmoid(triu_logits) > 0.5, dtype=torch.int32))
     acc = torch.true_divide(torch.sum(batch_targets_triu==triu_discrete), batch_targets_triu.shape[0]) 
 
     return acc.detach().cpu().numpy(), num_recon
-
 
 def triu_to_dense(triu_values, num_nodes):
     dense_adj = torch.zeros((num_nodes, num_nodes)).to(device).int()
