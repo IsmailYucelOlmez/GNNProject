@@ -7,5 +7,6 @@
 Dataset taken from [moleculenet.org](https://moleculenet.org/datasets-1)
 
 PyTorch, PyTorch Geometric, RDKit and DeepChem used for this project
+
 [GNN Article Poster.pptx](https://github.com/user-attachments/files/15749061/GNN.Article.Poster.pptx)
-[GNN Article Poster.pptx](https://github.com/user-attachments/files/15749061/GNN.Article.Poster.pptx)
+
